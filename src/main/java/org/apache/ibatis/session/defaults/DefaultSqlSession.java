@@ -47,11 +47,15 @@ import org.apache.ibatis.session.SqlSession;
  */
 public class DefaultSqlSession implements SqlSession {
 
+  // 配置
   private final Configuration configuration;
+  // 底层执行器
   private final Executor executor;
-
+  // 是否自动提交
   private final boolean autoCommit;
+  // true-发生过更新，还未提交/回滚
   private boolean dirty;
+  // 游标查询缓存
   private List<Cursor<?>> cursorList;
 
   public DefaultSqlSession(Configuration configuration, Executor executor, boolean autoCommit) {
@@ -121,7 +125,7 @@ public class DefaultSqlSession implements SqlSession {
     try {
       MappedStatement ms = configuration.getMappedStatement(statement);
       Cursor<T> cursor = executor.queryCursor(ms, wrapCollection(parameter), rowBounds);
-      registerCursor(cursor);
+      registerCursor(cursor); // 放入SqlSession缓存，在SqlSession关闭后自动关闭
       return cursor;
     } catch (Exception e) {
       throw ExceptionFactory.wrapException("Error querying database.  Cause: " + e, e);

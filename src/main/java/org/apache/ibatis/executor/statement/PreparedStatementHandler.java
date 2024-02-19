@@ -69,12 +69,14 @@ public class PreparedStatementHandler extends BaseStatementHandler {
   public <E> Cursor<E> queryCursor(Statement statement) throws SQLException {
     PreparedStatement ps = (PreparedStatement) statement;
     ps.execute();
+    // DefaultResultSetHandler
     return resultSetHandler.handleCursorResultSets(ps);
   }
 
   @Override
   protected Statement instantiateStatement(Connection connection) throws SQLException {
     String sql = boundSql.getSql();
+    // insert 主键相关
     if (mappedStatement.getKeyGenerator() instanceof Jdbc3KeyGenerator) {
       String[] keyColumnNames = mappedStatement.getKeyColumns();
       if (keyColumnNames == null) {
@@ -82,7 +84,9 @@ public class PreparedStatementHandler extends BaseStatementHandler {
       } else {
         return connection.prepareStatement(sql, keyColumnNames);
       }
-    } else if (mappedStatement.getResultSetType() == ResultSetType.DEFAULT) {
+    }
+    // 默认逻辑
+    else if (mappedStatement.getResultSetType() == ResultSetType.DEFAULT) {
       return connection.prepareStatement(sql);
     } else {
       return connection.prepareStatement(sql, mappedStatement.getResultSetType().getValue(), ResultSet.CONCUR_READ_ONLY);
@@ -91,6 +95,7 @@ public class PreparedStatementHandler extends BaseStatementHandler {
 
   @Override
   public void parameterize(Statement statement) throws SQLException {
+    // ParameterHandler
     parameterHandler.setParameters((PreparedStatement) statement);
   }
 

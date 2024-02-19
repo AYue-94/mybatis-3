@@ -35,10 +35,15 @@ import org.apache.ibatis.session.Configuration;
  */
 public class BoundSql {
 
+  // jdbc创建Statement的sql
   private final String sql;
+  // 参数映射
   private final List<ParameterMapping> parameterMappings;
+  // sqlSession的查询条件入参
   private final Object parameterObject;
+  // 扩展入参
   private final Map<String, Object> additionalParameters;
+  // 扩展入参，如foreach生成的属性__frch_{item}_{index}
   private final MetaObject metaParameters;
 
   public BoundSql(Configuration configuration, String sql, List<ParameterMapping> parameterMappings, Object parameterObject) {

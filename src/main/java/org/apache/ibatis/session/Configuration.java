@@ -99,9 +99,9 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
  * @author Clinton Begin
  */
 public class Configuration {
-
+  // 数据源 事务工厂
   protected Environment environment;
-
+  // 普通配置
   protected boolean safeRowBoundsEnabled;
   protected boolean safeResultHandlerEnabled = true;
   protected boolean mapUnderscoreToCamelCase;
@@ -146,18 +146,27 @@ public class Configuration {
    */
   protected Class<?> configurationFactory;
 
+  // Mapper
   protected final MapperRegistry mapperRegistry = new MapperRegistry(this);
+  // aop切面
   protected final InterceptorChain interceptorChain = new InterceptorChain();
+  // 类型转换（javaType<->jdbcType）
   protected final TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry(this);
+  // 别名
   protected final TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
+  // LanguageDriver
   protected final LanguageDriverRegistry languageRegistry = new LanguageDriverRegistry();
-
+  // sql -> MappedStatement
   protected final Map<String, MappedStatement> mappedStatements = new StrictMap<MappedStatement>("Mapped Statements collection")
       .conflictMessageProducer((savedValue, targetValue) ->
           ". please check " + savedValue.getResource() + " and " + targetValue.getResource());
+  // 二级缓存
   protected final Map<String, Cache> caches = new StrictMap<>("Caches collection");
+  // ResultMap
   protected final Map<String, ResultMap> resultMaps = new StrictMap<>("Result Maps collection");
+  // ParameterMap
   protected final Map<String, ParameterMap> parameterMaps = new StrictMap<>("Parameter Maps collection");
+  // 主键生成器
   protected final Map<String, KeyGenerator> keyGenerators = new StrictMap<>("Key Generators collection");
 
   protected final Set<String> loadedResources = new HashSet<>();
@@ -642,6 +651,7 @@ public class Configuration {
   }
 
   public ParameterHandler newParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
+    // LanguageDriver创建ParameterHandler => DefaultParameterHandler
     ParameterHandler parameterHandler = mappedStatement.getLang().createParameterHandler(mappedStatement, parameterObject, boundSql);
     parameterHandler = (ParameterHandler) interceptorChain.pluginAll(parameterHandler);
     return parameterHandler;
@@ -673,11 +683,13 @@ public class Configuration {
     } else if (ExecutorType.REUSE == executorType) {
       executor = new ReuseExecutor(this, transaction);
     } else {
+      // 默认Executor
       executor = new SimpleExecutor(this, transaction);
     }
-    if (cacheEnabled) {
+    if (cacheEnabled) { // 二级缓存
       executor = new CachingExecutor(executor);
     }
+    // Interceptor切面扩展
     executor = (Executor) interceptorChain.pluginAll(executor);
     return executor;
   }

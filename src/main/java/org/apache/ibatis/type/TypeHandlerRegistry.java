@@ -53,14 +53,17 @@ import org.apache.ibatis.session.Configuration;
  * @author Kazuki Shimizu
  */
 public final class TypeHandlerRegistry {
-
+  // jdbcType -> TypeHandler
   private final Map<JdbcType, TypeHandler<?>>  jdbcTypeHandlerMap = new EnumMap<>(JdbcType.class);
+  // javaType -> jdbcType -> TypeHandler
   private final Map<Type, Map<JdbcType, TypeHandler<?>>> typeHandlerMap = new ConcurrentHashMap<>();
+  // 未知类型转换器
   private final TypeHandler<Object> unknownTypeHandler;
+  // TypeHandler.class -> TypeHandler
   private final Map<Class<?>, TypeHandler<?>> allTypeHandlersMap = new HashMap<>();
-
+  // jdbcType -> 空值转换器
   private static final Map<JdbcType, TypeHandler<?>> NULL_TYPE_HANDLER_MAP = Collections.emptyMap();
-
+  // 枚举转换器
   private Class<? extends TypeHandler> defaultEnumTypeHandler = EnumTypeHandler.class;
 
   /**
@@ -79,8 +82,10 @@ public final class TypeHandlerRegistry {
   public TypeHandlerRegistry(Configuration configuration) {
     this.unknownTypeHandler = new UnknownTypeHandler(configuration);
 
+    // javaType -> jdbcType
     register(Boolean.class, new BooleanTypeHandler());
     register(boolean.class, new BooleanTypeHandler());
+    // jdbcType -> javaType
     register(JdbcType.BOOLEAN, new BooleanTypeHandler());
     register(JdbcType.BIT, new BooleanTypeHandler());
 

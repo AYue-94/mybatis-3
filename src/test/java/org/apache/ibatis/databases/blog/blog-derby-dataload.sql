@@ -16,6 +16,15 @@
 
 INSERT INTO author (id,username, password, email, bio, favourite_section) VALUES (101,'jim','********','jim@ibatis.apache.org','','NEWS');
 INSERT INTO author (id,username, password, email, bio, favourite_section) VALUES (102,'sally','********','sally@ibatis.apache.org',null,'VIDEOS');
+INSERT INTO author (id,username, password, email, bio, favourite_section) VALUES (103,'sally1','********','sally@ibatis.apache.org',null,'VIDEOS');
+INSERT INTO author (id,username, password, email, bio, favourite_section) VALUES (104,'sally2','********','sally@ibatis.apache.org',null,'VIDEOS');
+INSERT INTO author (id,username, password, email, bio, favourite_section) VALUES (105,'sally3','********','sally@ibatis.apache.org',null,'VIDEOS');
+INSERT INTO author (id,username, password, email, bio, favourite_section) VALUES (106,'sally4','********','sally@ibatis.apache.org',null,'VIDEOS');
+INSERT INTO author (id,username, password, email, bio, favourite_section) VALUES (107,'sally5','********','sally@ibatis.apache.org',null,'VIDEOS');
+INSERT INTO author (id,username, password, email, bio, favourite_section) VALUES (108,'sally6','********','sally@ibatis.apache.org',null,'VIDEOS');
+INSERT INTO author (id,username, password, email, bio, favourite_section) VALUES (109,'sally7','********','sally@ibatis.apache.org',null,'VIDEOS');
+INSERT INTO author (id,username, password, email, bio, favourite_section) VALUES (110,'sally8','********','sally@ibatis.apache.org',null,'VIDEOS');
+INSERT INTO author (id,username, password, email, bio, favourite_section) VALUES (111,'sally9','********','sally@ibatis.apache.org',null,'VIDEOS');
 
 INSERT INTO blog (id,author_id,title) VALUES (1,101,'Jim Business');
 INSERT INTO blog (id,author_id,title) VALUES (2,102,'Bally Slog');

@@ -138,6 +138,7 @@ public class DefaultCursor<T> implements Cursor<T> {
       objectWrapperResultHandler.fetched = false;
       status = CursorStatus.OPEN;
       if (!rsw.getResultSet().isClosed()) {
+        // 解析ResultSet的一行到内部类objectWrapperResultHandler，这样next就能拿到
         resultSetHandler.handleRowValues(rsw, resultMap, objectWrapperResultHandler, RowBounds.DEFAULT, null);
       }
     } catch (SQLException e) {
@@ -173,7 +174,9 @@ public class DefaultCursor<T> implements Cursor<T> {
 
     @Override
     public void handleResult(ResultContext<? extends T> context) {
+      // 1. 得到当前行解析结果（Author）
       this.result = context.getResultObject();
+      // 2. 停止遍历ResultSet
       context.stop();
       fetched = true;
     }

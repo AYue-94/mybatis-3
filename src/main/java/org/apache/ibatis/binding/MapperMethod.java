@@ -50,6 +50,7 @@ public class MapperMethod {
   private final MethodSignature method;
 
   public MapperMethod(Class<?> mapperInterface, Method method, Configuration config) {
+    // SqlCommand会找MappedStatement，常见异常Invalid bound statement
     this.command = new SqlCommand(config, mapperInterface, method);
     this.method = new MethodSignature(config, mapperInterface, method);
   }
@@ -217,13 +218,14 @@ public class MapperMethod {
   }
 
   public static class SqlCommand {
-
+    // MappedStatement的id = xml namespace+sqlId = mapper Interface + method
     private final String name;
     private final SqlCommandType type;
 
     public SqlCommand(Configuration configuration, Class<?> mapperInterface, Method method) {
       final String methodName = method.getName();
       final Class<?> declaringClass = method.getDeclaringClass();
+      // 从configuration中定位MappedStatement
       MappedStatement ms = resolveMappedStatement(mapperInterface, methodName, declaringClass,
           configuration);
       if (ms == null) {
@@ -259,6 +261,7 @@ public class MapperMethod {
       } else if (mapperInterface.equals(declaringClass)) {
         return null;
       }
+      // 从父接口递归找...
       for (Class<?> superInterface : mapperInterface.getInterfaces()) {
         if (declaringClass.isAssignableFrom(superInterface)) {
           MappedStatement ms = resolveMappedStatement(superInterface, methodName,

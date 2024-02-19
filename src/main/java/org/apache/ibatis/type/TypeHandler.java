@@ -25,7 +25,10 @@ import java.sql.SQLException;
  */
 public interface TypeHandler<T> {
 
+  /* javaType -> jdbcType **/
   void setParameter(PreparedStatement ps, int i, T parameter, JdbcType jdbcType) throws SQLException;
+
+  /* jdbcType -> javaType **/
 
   /**
    * Gets the result.

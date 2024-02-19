@@ -19,7 +19,7 @@ import java.io.Serializable;
 
 public class Author implements Serializable {
 
-  protected int id;
+  protected Integer id;
   protected String username;
   protected String password;
   protected String email;
@@ -67,7 +67,7 @@ public class Author implements Serializable {
     this.favouriteSection = favouriteSection;
   }
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+
+       Copyright 2009-2019 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.apache.ibatis.my.MyAuthorMapper">
+
+    <insert id="insert" parameterType="org.apache.ibatis.domain.blog.Author" useGeneratedKeys="true">
+<!--        <selectKey resultType="java.lang.Integer" keyProperty="id" order="BEFORE">-->
+<!--            select ifnull(max(id + 1),1) as id from author-->
+<!--        </selectKey>-->
+        insert into author (id,username,password,email,bio)
+        values (#{id},#{username},#{password},#{email},#{bio})
+    </insert>
+
+    <select id="selectAuthorClassic"
+            resultType="org.apache.ibatis.domain.blog.Author">
+        select * from author where id = #{id}
+    </select>
+    <select id="selectByCondition" resultType="org.apache.ibatis.domain.blog.Author">
+        select * from author
+        <where>
+            <if test="id != null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="username != null">
+                and username = #{username}
+            </if>
+        </where>
+    </select>
+<!--    <select id="selectByIds" resultType="org.apache.ibatis.domain.blog.Author">-->
+<!--        select *-->
+<!--        from author-->
+<!--        where id in-->
+<!--        <foreach collection="collection" item="i" open="(" close=")" separator=",">-->
+<!--            #{i}-->
+<!--        </foreach>-->
+<!--    </select>-->
+
+    <resultMap id="authorResultMap" type="org.apache.ibatis.domain.blog.Author">
+        <id column="authorId" property="id"/>
+        <result column="name" property="username" typeHandler="org.apache.ibatis.type.StringTypeHandler"/>
+    </resultMap>
+    <select id="selectReturnResultMap" resultMap="authorResultMap">
+        select id as authorId, username as name from author where id = #{id}
+    </select>
+    <select id="selectReturnResultType" resultType="org.apache.ibatis.domain.blog.Author">
+        select id, username from author where id = #{id}
+    </select>
+    <select id="selectRowBounds" resultType="org.apache.ibatis.domain.blog.Author">
+        select * from author
+    </select>
+    <update id="updateOne" parameterType="org.apache.ibatis.domain.blog.Author">
+        update author
+        <set>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

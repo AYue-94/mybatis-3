@@ -47,6 +47,7 @@ public class DefaultMapResultHandler<K, V> implements ResultHandler<V> {
   @Override
   public void handleResult(ResultContext<? extends V> context) {
     final V value = context.getResultObject();
+    // 反射获取key
     final MetaObject mo = MetaObject.forObject(value, objectFactory, objectWrapperFactory, reflectorFactory);
     // TODO is that assignment always true?
     final K key = (K) mo.getValue(mapKey);

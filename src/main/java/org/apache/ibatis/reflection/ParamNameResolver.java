@@ -50,7 +50,7 @@ public class ParamNameResolver {
    * <li>aMethod(int a, RowBounds rb, int b) -&gt; {{0, "0"}, {2, "1"}}</li>
    * </ul>
    */
-  private final SortedMap<Integer, String> names;
+  private final SortedMap<Integer/*入参下标*/, String/*参数名称*/> names;
 
   private boolean hasParamAnnotation;
 
@@ -123,7 +123,7 @@ public class ParamNameResolver {
     final int paramCount = names.size();
     if (args == null || paramCount == 0) {
       return null;
-    } else if (!hasParamAnnotation && paramCount == 1) {
+    } else if (!hasParamAnnotation && paramCount == 1) { // 没有@Param注解，参数列表.size=1
       Object value = args[names.firstKey()];
       return wrapToMapIfCollection(value, useActualParamName ? names.get(0) : null);
     } else {

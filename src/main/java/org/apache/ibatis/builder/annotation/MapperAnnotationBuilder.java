@@ -115,11 +115,14 @@ public class MapperAnnotationBuilder {
   public void parse() {
     String resource = type.toString();
     if (!configuration.isResourceLoaded(resource)) {
+      // 【xml配置sql】 加载Mapper全类名路径.xml
       loadXmlResource();
       configuration.addLoadedResource(resource);
       assistant.setCurrentNamespace(type.getName());
+      // 二级缓存
       parseCache();
       parseCacheRef();
+      // 【注解配置sql】Mapper方法上的注解处理
       for (Method method : type.getMethods()) {
         if (!canHaveStatement(method)) {
           continue;
